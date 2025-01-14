@@ -7,7 +7,7 @@ const AllStories = () => {
     const { isPending, isError, error, data: stories } = useQuery({
         queryKey: ['stories'],
         queryFn: async () => {
-            const res = await fetch('http://localhost:4000/allstories');
+            const res = await fetch('https://travel-tourism-seven.vercel.app/allstories');
             return res.json();
         }
     })

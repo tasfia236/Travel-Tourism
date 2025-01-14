@@ -46,7 +46,7 @@ const Routes = createBrowserRouter([
         path: 'details/:id',
         element: <Detalis></Detalis>,
         loader: ({ params }) =>
-          fetch(`http://localhost:4000/spots/${params.id}`)
+          fetch(`https://travel-tourism-seven.vercel.app/spots/${params.id}`)
       },
       {
         path: '/all-stories',
@@ -56,19 +56,19 @@ const Routes = createBrowserRouter([
         path: '/story/:id',
         element: <StoryDetail></StoryDetail>,
         loader: ({ params }) =>
-          fetch(`http://localhost:4000/story/${params.id}`)
+          fetch(`https://travel-tourism-seven.vercel.app/story/${params.id}`)
       },
       {
         path: '/guideDetails/:id',
         element: <GuideDetails></GuideDetails>,
         loader: ({ params }) =>
-          fetch(`http://localhost:4000/guidedetails/${params.id}`)
+          fetch(`https://travel-tourism-seven.vercel.app/guidedetails/${params.id}`)
       },
       {
         path: 'tourtype/:id',
         element: <TypePackages></TypePackages>,
         loader: ({ params }) =>
-          fetch(`http://localhost:4000/tourtype/${params.id}`)
+          fetch(`https://travel-tourism-seven.vercel.app/tourtype/${params.id}`)
       }
     ]
   },
