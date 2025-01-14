@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.package-details {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+}
+
+.package-details h1 {
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+
+.package-details .tour-type {
+    font-style: italic;
+    color: #555;
+}
+
+.tour-type{
+    text-transform: uppercase;
+}
+
+.package-details .price {
+    font-size: 1.5em;
+    color: #e91e63;
+    margin: 20px 0;
+}
+
+.description, .tour-plan {
+    text-align: left;
+    margin-top: 40px;
+}
+
+.description h2,  .tour-plan h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+.description p, .tour-plan p {
+    font-size: 1em;
+    color: #333;
+    line-height: 1.6;
+    padding-left: 12px;
+}
+
+.tour-plan .tour-day {
+    margin-bottom: 20px;
+}
+
+.tour-plan .tour-day h3 {
+    font-size: 1.2em;
+    margin-bottom: 5px;
+    background-color: #b9b7b7;
+    padding-left: 10px;
+    border-radius: 10px;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination-button {
+    background-color: #4a5568;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    margin: 0 4px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.pagination-button:hover {
+    background-color: #718096;
+}
+
+.pagination-button.active {
+    background-color: #3182ce;
+}
