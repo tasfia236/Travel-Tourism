@@ -482,5 +482,5 @@ run().catch(console.dir);
 
 
 app.listen(port, () => {
-    // console.log(`brand server is running on port ${port}`);
+     console.log(`brand server is running on port ${port}`);
 })
