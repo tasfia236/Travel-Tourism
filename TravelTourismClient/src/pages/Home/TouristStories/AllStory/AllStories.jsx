@@ -22,7 +22,7 @@ const AllStories = () => {
     }
 
     return (
-        <div className="m-5 mx-auto py-12 text-center">
+        <div className="mx-auto p-12 text-center">
             <h2 className="py-10 font-black text-4xl text-sky-600">Tourist Stories</h2>
             <div className="gap-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                 {stories.map(story => (
