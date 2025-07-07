@@ -1,4 +1,3 @@
-
 import Swal from 'sweetalert2';
 import { FaTrashAlt, FaUsers } from 'react-icons/fa';
 import { useQuery } from '@tanstack/react-query';
@@ -7,235 +6,214 @@ import { useState } from 'react';
 import Select from 'react-select';
 
 const ManageUser = () => {
-    const axiosSecure = useAxiosSecure();
-    const [searchTerm, setSearchTerm] = useState('');
-    const [selectedRole, setSelectedRole] = useState(null); // State for selected role filter
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 10;
+  const axiosSecure = useAxiosSecure();
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedRole, setSelectedRole] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
-    const { data: users = [], refetch: refetchUsers } = useQuery({
-        queryKey: ['users'],
-        queryFn: async () => {
-            const res = await axiosSecure.get('/users');
-            return res.data;
-        }
-    });
+  const { data: users = [], refetch: refetchUsers } = useQuery({
+    queryKey: ['users'],
+    queryFn: async () => {
+      const res = await axiosSecure.get('/users');
+      return res.data;
+    }
+  });
 
-    const { data: requests = [] } = useQuery({
-        queryKey: ['requests'],
-        queryFn: async () => {
-            const res = await axiosSecure.get('/request-guide');
-            return res.data;
-        }
-    });
+  const { data: requests = [] } = useQuery({
+    queryKey: ['requests'],
+    queryFn: async () => {
+      const res = await axiosSecure.get('/request-guide');
+      return res.data;
+    }
+  });
 
-    //  // console.log(users);
-    //  // console.log(requests);
-
-    const handleMakeAdmin = (user) => {
-        axiosSecure.patch(`/users/admin/${user._id}`).then((res) => {
-            if (res.data.modifiedCount > 0) {
-                refetchUsers();
-                Swal.fire({
-                    position: 'top-end',
-                    icon: 'success',
-                    title: `${user.name} is an Admin Now!`,
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-            }
-        });
-    };
-
-    const handleMakeTourGuide = (user) => {
-  //      // console.log('handleMakeTourGuide called for user:', user);
-
-        axiosSecure.patch(`/users/guide/${user._id}`)
-            .then((res) => {
-        //        // console.log('Response from server:', res.data);
-                if (res.data.modifiedCount > 0) {
-                    refetchUsers();
-                    Swal.fire({
-                        position: 'top-end',
-                        icon: 'success',
-                        title: `${user.name} is a Tour Guide Now!`,
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                } else if (res.data.message) {
-                    Swal.fire({
-                        position: 'top-end',
-                        icon: 'info',
-                        title: res.data.message,
-                        showConfirmButton: true
-                    });
-                }
-            })
-            .catch((error) => {
-                console.error('Error updating user role:', error);
-            });
-    };
-
-
-    const handleDeleteUser = (user) => {
+  const handleMakeAdmin = (user) => {
+    axiosSecure.patch(`/users/admin/${user._id}`).then((res) => {
+      if (res.data.modifiedCount > 0) {
+        refetchUsers();
         Swal.fire({
-            title: 'Are you sure?',
-            text: 'You won\'t be able to revert this!',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                axiosSecure.delete(`/users/${user._id}`).then((res) => {
-                    if (res.data.deletedCount > 0) {
-                        refetchUsers();
-                        Swal.fire({
-                            title: 'Deleted!',
-                            text: 'Your file has been deleted.',
-                            icon: 'success'
-                        });
-                    }
-                });
-            }
+          position: 'top-end',
+          icon: 'success',
+          title: `${user.name} is now an Admin!`,
+          showConfirmButton: false,
+          timer: 1500
         });
-    };
-
-    // Filter users by role
-    const filteredUsers = users.filter((user) => {
-        if (!selectedRole) return true; // Return true for all if no role is selected
-        return user.role?.toLowerCase() === selectedRole.value.toLowerCase();
+      }
     });
+  };
 
-    // Filter users by search term (name or email)
-    const searchedUsers = filteredUsers.filter((user) => {
-        const searchTermLower = searchTerm.toLowerCase();
-        return (
-            user.name?.toLowerCase().includes(searchTermLower) ||
-            user.email?.toLowerCase().includes(searchTermLower)
-        );
-    });
-
-    // Options for role filter dropdown
-    const roleOptions = [
-        { value: 'admin', label: 'Admin' },
-        { value: 'tourGuide', label: 'Tour Guide' },
-        { value: 'user', label: 'User' }
-    ];
-
-
-    // Calculate pagination
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const currentManageUser = searchedUsers.slice(startIndex, endIndex);
-
-    const totalPages = Math.ceil(searchedUsers.length / itemsPerPage);
-
-    const getPageNumbers = () => {
-        const pageNumbers = [];
-        for (let i = 1; i <= totalPages; i++) {
-            pageNumbers.push(i);
+  const handleMakeTourGuide = (user) => {
+    axiosSecure.patch(`/users/guide/${user._id}`)
+      .then((res) => {
+        if (res.data.modifiedCount > 0) {
+          refetchUsers();
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: `${user.name} is now a Tour Guide!`,
+            showConfirmButton: false,
+            timer: 1500
+          });
+        } else if (res.data.message) {
+          Swal.fire({
+            position: 'top-end',
+            icon: 'info',
+            title: res.data.message,
+            showConfirmButton: true
+          });
         }
-        return pageNumbers;
-    };
+      })
+      .catch(error => console.error(error));
+  };
 
+  const handleDeleteUser = (user) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'You won’t be able to revert this!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosSecure.delete(`/users/${user._id}`).then((res) => {
+          if (res.data.deletedCount > 0) {
+            refetchUsers();
+            Swal.fire('Deleted!', 'User has been removed.', 'success');
+          }
+        });
+      }
+    });
+  };
 
-    return (
-        <div>
-            <div className="flex justify-evenly my-4">
-                <h2 className="text-3xl">Manage Users: {users.length}</h2>
-            </div>
-            <div className="flex justify-between items-center mb-4">
-                {/* Search input */}
-                <input
-                    type="text"
-                    placeholder="Search by Name or Email"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="border-gray-300 px-3 py-2 border rounded-md focus:ring-1 focus:ring-blue-500 w-96 focus:outline-none"
-                />
+  const filteredUsers = users.filter((user) => {
+    if (!selectedRole) return true;
+    return user.role?.toLowerCase() === selectedRole.value.toLowerCase();
+  });
 
-                {/* Role filter dropdown */}
-                <Select
-                    className="w-64"
-                    placeholder="Filter by Role"
-                    options={roleOptions}
-                    onChange={(selectedOption) =>
-                        setSelectedRole(selectedOption)
-                    }
-                    value={selectedRole}
-                />
-            </div>
-            <div className="overflow-x-auto">
-                <table className="w-full table table-zebra">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Admin Role</th>
-                            <th>Tour Guide Role</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {currentManageUser.map((user, index) => (
-                            <tr key={user._id}>
-                                <th>{index + 1}</th>
-                                <td>{user.name}</td>
-                                <td>{user.email}</td>
-                                <td>
-                                    {user.role === 'admin' ? 'Admin' : (
-                                        <button
-                                            onClick={() => handleMakeAdmin(user)}
-                                            className="bg-blue-500 btn btn-sm"
-                                        >
-                                            <FaUsers className="text-2xl text-white" />
-                                        </button>
-                                    )}
-                                </td>
-                                <td>
-                                    {user.role === 'tourGuide' ? 'Tour Guide' : (
-                                        requests.some((request) => request.email === user.email) ? (
-                                            <button
-                                                onClick={() => handleMakeTourGuide(user)}
-                                                className="bg-blue-500 btn btn-sm"
-                                            >
-                                                <FaUsers className="text-2xl text-white" />
-                                            </button>
-                                        ) : 'Not Requested'
-                                    )}
-                                </td>
+  const searchedUsers = filteredUsers.filter((user) => {
+    const term = searchTerm.toLowerCase();
+    return user.name?.toLowerCase().includes(term) || user.email?.toLowerCase().includes(term);
+  });
 
-                                <td>
-                                    <button
-                                        onClick={() => handleDeleteUser(user)}
-                                        className="btn btn-ghost btn-lg"
-                                    >
-                                        <FaTrashAlt className="text-red-600" />
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-                {/* Pagination controls */}
-                <div className="pagination">
-                    {getPageNumbers().map((number) => (
-                        <button
-                            key={number}
-                            className={`pagination-button ${currentPage === number ? 'active' : ''}`}
-                            onClick={() => setCurrentPage(number)}
-                        >
-                            {number}
-                        </button>
-                    ))}
+  const roleOptions = [
+    { value: 'admin', label: 'Admin' },
+    { value: 'tourGuide', label: 'Tour Guide' },
+    { value: 'user', label: 'User' }
+  ];
 
-                </div>
-            </div>
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentManageUser = searchedUsers.slice(startIndex, startIndex + itemsPerPage);
+  const totalPages = Math.ceil(searchedUsers.length / itemsPerPage);
+
+  return (
+    <div className="bg-gradient-to-r from-sky-50 to-white p-6 min-h-screen">
+      <h2 className="mb-6 font-bold text-sky-600 text-4xl text-center">Manage Users <span className="text-gray-500 text-base">({users.length})</span></h2>
+
+      <div className="flex md:flex-row flex-col justify-between items-center gap-4 mb-6">
+        <input
+          type="text"
+          placeholder="🔍 Search by Name or Email"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="px-4 py-2 border border-blue-200 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-400 w-full md:w-1/2"
+        />
+
+        <div className="w-full md:w-1/3">
+          <Select
+            options={roleOptions}
+            value={selectedRole}
+            onChange={setSelectedRole}
+            placeholder="🎯 Filter by Role"
+            isClearable
+            className="react-select-container"
+            classNamePrefix="react-select"
+          />
         </div>
-    );
+      </div>
+
+      <div className="bg-white shadow-md rounded-2xl overflow-x-auto">
+        <table className="w-full table-auto">
+          <thead className="bg-sky-100 text-sky-700">
+            <tr className="text-left">
+              <th className="p-3">#</th>
+              <th className="p-3">Name</th>
+              <th className="p-3">Email</th>
+              <th className="p-3">Admin</th>
+              <th className="p-3">Tour Guide</th>
+              <th className="p-3 text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {currentManageUser.map((user, index) => (
+              <tr key={user._id} className="hover:bg-blue-50 transition-all duration-200">
+                <td className="p-3">{startIndex + index + 1}</td>
+                <td className="p-3">{user.name}</td>
+                <td className="p-3">{user.email}</td>
+                <td className="p-3">
+                  {user.role === 'admin' ? (
+                    <span className="font-semibold text-green-600">Admin</span>
+                  ) : (
+                    <button
+                      onClick={() => handleMakeAdmin(user)}
+                      className="bg-gradient-to-r from-sky-400 to-sky-600 text-white btn btn-xs"
+                      title="Make Admin"
+                    >
+                      <FaUsers />
+                    </button>
+                  )}
+                </td>
+                <td className="p-3">
+                  {user.role === 'tourGuide' ? (
+                    <span className="font-semibold text-emerald-600">Tour Guide</span>
+                  ) : (
+                    requests.some(r => r.email === user.email) ? (
+                      <button
+                        onClick={() => handleMakeTourGuide(user)}
+                        className="bg-gradient-to-r from-sky-400 to-blue-600 text-white btn btn-xs"
+                        title="Approve Tour Guide"
+                      >
+                        <FaUsers />
+                      </button>
+                    ) : (
+                      <span className="text-gray-400">Not Requested</span>
+                    )
+                  )}
+                </td>
+                <td className="p-3 text-center">
+                  <button
+                    onClick={() => handleDeleteUser(user)}
+                    className="bg-red-100 hover:bg-red-200 text-red-600 btn btn-sm"
+                    title="Delete User"
+                  >
+                    <FaTrashAlt />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Pagination */}
+      <div className="flex justify-center gap-2 mt-6">
+        {[...Array(totalPages)].map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setCurrentPage(i + 1)}
+            className={`px-4 py-2 border rounded-md ${currentPage === i + 1
+              ? 'bg-sky-500 text-white'
+              : 'bg-white text-sky-600 border-sky-300'
+              } hover:bg-sky-100`}
+          >
+            {i + 1}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
 };
 
 export default ManageUser;

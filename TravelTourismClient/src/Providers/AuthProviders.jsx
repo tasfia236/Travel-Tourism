@@ -1,80 +1,87 @@
-import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
-import { createContext, useEffect, useState } from "react";
-import auth from '../firebase/firebase.config';
-import PropTypes from 'prop-types';
-import useAxiosPublic from "../hooks/useAxiosPublic";
+/* eslint-disable react-refresh/only-export-components */
+import {
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut,
+  updateProfile
+} from 'firebase/auth'
+import { createContext, useEffect, useState } from 'react'
+import auth from '../firebase/firebase.config'
+import PropTypes from 'prop-types'
+import useAxiosPublic from '../hooks/useAxiosPublic'
 // import axios from "axios";
 
-
-export const AuthContext = createContext(null);
+export const AuthContext = createContext(null)
 
 const AuthProviders = ({ children }) => {
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const axiosPublic = useAxiosPublic();
+  const [user, setUser] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const axiosPublic = useAxiosPublic()
 
-    const createUser = (email, password) => {
-        setLoading(true);
-        return createUserWithEmailAndPassword(auth, email, password)
+  const createUser = (email, password) => {
+    setLoading(true)
+    return createUserWithEmailAndPassword(auth, email, password)
+  }
+
+  const signIn = async (email, password) => {
+    try {
+      return await signInWithEmailAndPassword(auth, email, password)
+    } catch (error) {
+      console.error('Login error:', error)
+      throw error
     }
+  }
 
-    const signIn = (email, password) => {
-        setLoading(true);
-        return signInWithEmailAndPassword(auth, email, password);
+  const logOut = () => {
+    setLoading(true)
+    return signOut(auth)
+  }
+
+  const updateUserProfile = (name, photo) => {
+    return updateProfile(auth.currentUser, {
+      displayName: name,
+      photoURL: photo
+    })
+  }
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, currentUser => {
+      setUser(currentUser)
+      if (currentUser) {
+        // get token and store client
+        const userInfo = { email: currentUser.email }
+        axiosPublic.post('/jwt', userInfo).then(res => {
+          if (res.data.token) {
+            localStorage.setItem('access-token', res.data.token)
+          }
+        })
+      } else {
+        localStorage.removeItem('access-token')
+      }
+      setLoading(false)
+    })
+    return () => {
+      return unsubscribe()
     }
+  }, [axiosPublic])
 
-    const logOut = () => {
-        setLoading(true);
-        return signOut(auth);
-    }
+  const authInfo = {
+    user,
+    loading,
+    createUser,
+    signIn,
+    logOut,
+    updateUserProfile
+  }
 
-    const updateUserProfile = (name, photo) => {
-        return updateProfile(auth.currentUser, {
-            displayName: name, photoURL: photo
-        });
-    }
+  return (
+    <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
+  )
+}
 
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, currentUser => {
-            setUser(currentUser);
-            if (currentUser) {
-                // get token and store client
-                const userInfo = { email: currentUser.email };
-                axiosPublic.post('/jwt', userInfo)
-                    .then(res => {
-                        if (res.data.token) {
-                            localStorage.setItem('access-token', res.data.token);
-                        }
-                    })
-            }
-            else {
-                localStorage.removeItem('access-token');
-            }
-            setLoading(false);
-        });
-        return () => {
-            return unsubscribe();
-        }
-    }, [axiosPublic])
-
-    const authInfo = {
-        user,
-        loading,
-        createUser,
-        signIn,
-        logOut,
-        updateUserProfile
-    }
-
-    return (
-        <AuthContext.Provider value={authInfo}>
-            {children}
-        </AuthContext.Provider>
-    );
-};
-
-export default AuthProviders;
+export default AuthProviders
 
 AuthProviders.propTypes = {
-    children: PropTypes.node
+  children: PropTypes.node
 }

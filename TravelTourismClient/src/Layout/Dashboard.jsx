@@ -1,146 +1,158 @@
 import {
-    FaAd, FaBook, FaCalendar, FaEnvelope, FaHeart, FaHome, FaList, FaPlus,
-    FaSearch, FaShoppingCart, FaUsers, FaUtensils
-} from "react-icons/fa";
-import { NavLink, Outlet } from "react-router-dom";
-import useAdmin from "../hooks/useAdmin";
-import useTourGuide from "../hooks/useTourGuide";
-import useUser from "../hooks/useUser";
+  FaHome,
+  FaUtensils,
+  FaUsers,
+  FaList,
+  FaHeart,
+  FaPlus,
+  FaEnvelope
+} from 'react-icons/fa'
+import { RiLogoutBoxLine } from 'react-icons/ri'
+import { NavLink, Outlet } from 'react-router-dom'
+import useAdmin from '../hooks/useAdmin'
+import useTourGuide from '../hooks/useTourGuide'
+import useUser from '../hooks/useUser'
+import { useContext } from 'react'
+import { AuthContext } from '../Providers/AuthProviders'
 
 const Dashboard = () => {
-    // Get the isAdmin value from custom hook
-    const [isAdmin] = useAdmin();
-    const [isTourGuide] = useTourGuide();
-    const [isUser] = useUser();
+  const [isAdmin] = useAdmin()
+  const [isTourGuide] = useTourGuide()
+  const [isUser] = useUser()
 
-    // Admin specific links
-    const adminLinks = (
-        <>
-            <li>
-                <NavLink to="/dashboard/profile">
-                    <FaHome></FaHome>
-                    Admin Profile</NavLink>
-            </li>
-            <li>
-                <NavLink to="/dashboard/addPackage">
-                    <FaUtensils></FaUtensils>
-                    Add Package</NavLink>
-            </li>
-            <li>
-                <NavLink to="/dashboard/manageUsers">
-                    <FaUsers></FaUsers>
-                    Manage Users</NavLink>
-            </li>
-        </>
-    );
+  const { logOut } = useContext(AuthContext) || {}
 
-    const tourGuideLinks = (
-        <>
-            <>
-                <li>
-                    <NavLink to="/dashboard/profile">
-                        <FaHome></FaHome>
-                        Tour Guide Profile</NavLink>
-                </li>
-                <li>
-                    <NavLink to="/dashboard/assign">
-                        <FaList></FaList>
-                        My Assigned Tours</NavLink>
-                </li>
-            </>
-        </>
-    )
+  const handleLogOut = () => {
+    logOut()
+      .then(() => {})
+      .catch(error => console.log(error))
+  }
 
-    // User specific links
-    const userLinks = (
-        <>
-            <li>
-                <NavLink to="/dashboard/profile">
-                    <FaHome></FaHome>
-                    User Profile</NavLink>
-            </li>
-            <li>
-                <NavLink to="/dashboard/mybooking">
-                    <FaList></FaList>
-                    My Bookings</NavLink>
-            </li>
-            <li>
-                <NavLink to="/dashboard/mywishlist">
-                    <FaHeart></FaHeart>
-                    My WishList</NavLink>
-            </li>
-            <li>
-                <NavLink to="/dashboard/requestAdmin">
-                    <FaPlus></FaPlus>
-                    Request to Admin</NavLink>
-            </li>
-        </>
+  const navLinkClass = ({ isActive }) =>
+    `flex items-center gap-3 px-4 py-2 rounded-lg text-sm transition-all duration-300 ${
+      isActive
+        ? 'bg-gradient-to-r from-sky-600 to-cyan-500 text-white shadow-md'
+        : 'text-gray-700 hover:bg-sky-100 hover:text-sky-700'
+    }`
 
-    );
+  const adminLinks = (
+    <>
+      <li>
+        <NavLink to='/dashboard/profile' className={navLinkClass}>
+          <FaHome /> Admin Profile
+        </NavLink>
+      </li>
+      <li>
+        <NavLink to='/dashboard/addPackage' className={navLinkClass}>
+          <FaUtensils /> Add Package
+        </NavLink>
+      </li>
+      <li>
+        <NavLink to='/dashboard/manageUsers' className={navLinkClass}>
+          <FaUsers /> Manage Users
+        </NavLink>
+      </li>
+    </>
+  )
 
-    let links;
-    if (isAdmin) {
-        links = adminLinks;
-    } else if (isTourGuide) {
-        links = tourGuideLinks;
-    } else if (isUser) {
-        links = userLinks;
-    }
+  const tourGuideLinks = (
+    <>
+      <li>
+        <NavLink to='/dashboard/profile' className={navLinkClass}>
+          <FaHome /> Guide Profile
+        </NavLink>
+      </li>
+      <li>
+        <NavLink to='/dashboard/assign' className={navLinkClass}>
+          <FaList /> My Assigned Tours
+        </NavLink>
+      </li>
+    </>
+  )
 
-    return (
-        <div className="drawer">
-            <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
-            <div className="drawer-content flex flex-col">
-                {/* Navbar */}
-                <div className="w-full navbar bg-blue-400">
-                    <div className="flex-none lg:hidden">
-                        <label htmlFor="my-drawer-3" aria-label="open sidebar" className="btn btn-square btn-ghost">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-6 h-6 stroke-current"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-                        </label>
-                    </div>
-                    <div className="flex-1 px-2 mx-2">DashBoard</div>
-                    <div className="flex-none hidden lg:block">
-                        <ul className="menu menu-horizontal">
-                            {links}
-                            <div className="divider"></div>
-                            <li>
-                                <NavLink to="/">
-                                    <FaHome /> Home
-                                </NavLink>
-                            </li>
-                            <li>
-                                <NavLink to="/order/contact">
-                                    <FaEnvelope /> Contact
-                                </NavLink>
-                            </li>
-                        </ul>
-                    </div>
+  const userLinks = (
+    <>
+      <li>
+        <NavLink to='/dashboard/profile' className={navLinkClass}>
+          <FaHome /> User Profile
+        </NavLink>
+      </li>
+      <li>
+        <NavLink to='/dashboard/mybooking' className={navLinkClass}>
+          <FaList /> My Bookings
+        </NavLink>
+      </li>
+      <li>
+        <NavLink to='/dashboard/mywishlist' className={navLinkClass}>
+          <FaHeart /> My Wishlist
+        </NavLink>
+      </li>
+      <li>
+        <NavLink to='/dashboard/requestAdmin' className={navLinkClass}>
+          <FaPlus /> Request to Admin
+        </NavLink>
+      </li>
+    </>
+  )
 
-                </div>
-                {/* Dashboard content */}
-                <div className="flex-1 p-8">
-                    <Outlet />
-                </div>
-            </div>
-            <div className="drawer-side">
-                <label htmlFor="my-drawer-3" aria-label="close sidebar" className="drawer-overlay"></label>
-                <ul className="menu p-4 w-80 min-h-full bg-base-200">
-                    {links}
-                    <div className="divider"></div>
-                    <li>
-                        <NavLink to="/">
-                            <FaHome /> Home
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="/order/contact">
-                            <FaEnvelope /> Contact
-                        </NavLink>
-                    </li>
-                </ul>
-            </div>
+  let links
+  if (isAdmin) links = adminLinks
+  else if (isTourGuide) links = tourGuideLinks
+  else if (isUser) links = userLinks
+
+  return (
+    <div className='drawer lg:drawer-open'>
+      <input id='my-drawer-3' type='checkbox' className='drawer-toggle' />
+      <div className='flex flex-col bg-gradient-to-br from-white via-sky-50 to-cyan-50 min-h-screen drawer-content'>
+        {/* Top Navbar */}
+        <div className='flex justify-between items-center bg-white/60 shadow-sm backdrop-blur px-6 py-4 border-white/30 border-b w-full'>
+          <label
+            htmlFor='my-drawer-3'
+            className='lg:hidden btn btn-ghost drawer-button'
+          >
+            ☰
+          </label>
+          <h2 className='font-semibold text-sky-700 text-xl'>Dashboard</h2>
         </div>
-    );
-};
 
-export default Dashboard;
+        {/* Main Content */}
+        <div className='flex-grow p-6 lg:p-10'>
+          <div className='bg-white/70 shadow-lg backdrop-blur border border-white/30 rounded-xl glass'>
+            <Outlet />
+          </div>
+        </div>
+      </div>
+
+      {/* Sidebar */}
+      <div className='z-50 drawer-side'>
+        <label htmlFor='my-drawer-3' className='drawer-overlay'></label>
+        <ul className='space-y-2 bg-white/70 backdrop-blur-lg p-6 border-white/30 border-r w-72 min-h-full menu'>
+          <h2 className='mb-4 font-bold text-sky-600 text-xl'>User Panel</h2>
+
+          {links}
+
+          <div className='divider' />
+
+          <li>
+            <NavLink to='/' className={navLinkClass}>
+              <FaHome /> Home
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to='/order/contact' className={navLinkClass}>
+              <FaEnvelope /> Contact
+            </NavLink>
+          </li>
+          <li>
+            <NavLink onClick={handleLogOut} to='/'>
+              <RiLogoutBoxLine />
+              Logout
+            </NavLink>
+          </li>
+        </ul>
+      </div>
+    </div>
+  )
+}
+
+export default Dashboard

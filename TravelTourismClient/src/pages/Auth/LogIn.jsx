@@ -22,13 +22,13 @@ const LogIn = () => {
     const handleLogIn = event => {
         event.preventDefault();
         const form = event.target;
-        const email = form.email.value;
-        const password = form.password.value;
+        const email = form.email.value.trim()
+        const password = form.password.value.trim()
    //     // console.log(email, password);
         signIn(email, password)
             .then(result => {
                 const user = result.user;
-        //        // console.log(user);
+                console.log(user);
                 Swal.fire({
                     title: 'Login Successful.',
                     showClass: {
@@ -90,7 +90,7 @@ const LogIn = () => {
             </Helmet>
 
             <div className="">
-                <div className="m-8 text-center lg:text-left">
+                <div className="m-8 lg:text-left text-center">
                     <h1 className="font-bold text-5xl">Login now!</h1>
                 </div>
                 <div className="bg-base-100 shadow-2xl card lg:card-side">
@@ -110,7 +110,7 @@ const LogIn = () => {
                             </label>
                             <input type="password" name="password" placeholder="password" className="input-bordered input" />
                         </div>
-                        <div className="form-control mt-6">
+                        <div className="mt-6 form-control">
                             <button className="btn btn-primary">Login</button>
                         </div>
                         <div className="form-control">

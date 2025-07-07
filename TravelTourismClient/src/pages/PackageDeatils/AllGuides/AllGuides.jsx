@@ -1,36 +1,40 @@
+import PropTypes from 'prop-types'
 
-const AllGuides = ({guides}) => {
+const AllGuides = ({ guides }) => {
+  return (
+    <div className='px-4 py-10 overflow-x-auto'>
+      <table className='table bg-white shadow rounded-lg w-full overflow-hidden text-sm'>
+        <thead className='bg-sky-100 text-sky-800'>
+          <tr>
+            <th>#</th>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Email</th>
+          </tr>
+        </thead>
+        <tbody>
+          {guides.map((user, index) => (
+            <tr key={user._id} className='hover:bg-sky-50 transition'>
+              <td>{index + 1}</td>
+              <td>
+                <img
+                  className='rounded-full w-10 h-10 object-cover'
+                  src={user.image}
+                  alt={user.name}
+                />
+              </td>
+              <td className='font-semibold'>{user.name}</td>
+              <td className='text-gray-600'>{user.email}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
 
-    return (
-        <div>
-            <div className="overflow-x-auto">
-                <table className="table table-zebra w-full">
-                    {/* head */}
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th></th>
-                            <th>Name</th>
-                            <th>Email</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            guides.map((user, index) => <tr key={user._id}>
-                                <th>{index + 1}</th>
-                                <td>
-                                    <img className="btn-circle" src={user.image} alt="" />
-                                </td>
-                                <td>{user.name}</td>
-                                <td>{user.email}</td>
-                            </tr>)
-                        }
+AllGuides.propTypes = {
+  guides: PropTypes.object.isRequired
+}
 
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    );
-};
-
-export default AllGuides;
+export default AllGuides

@@ -1,30 +1,33 @@
-
-import { useLoaderData } from 'react-router-dom';
+import { useLoaderData } from 'react-router-dom'
 
 const GuideDetails = () => {
-    const guide = useLoaderData();
+  const guide = useLoaderData()
+  const { name, email, image, number, education, skill, work } = guide
 
-    const { name, email, image, number, education, skill, work } = guide;
-    // console.log(guide);
+  return (
+    <div className='mx-auto px-6 pt-20 pb-12 max-w-4xl text-center'>
+      <img
+        src={image}
+        alt={name}
+        className='shadow-lg mx-auto mb-6 border-4 border-sky-200 rounded-full w-36 md:w-48 lg:w-60 h-36 md:h-48 lg:h-60'
+      />
+      <h2 className='font-bold text-sky-700 text-2xl'>{name}</h2>
+      <p className='mt-2 text-gray-600'>📧 {email}</p>
+      <p className='text-gray-600'>📱 {number}</p>
+      <p className='mb-6 text-gray-600'>🎓 {education}</p>
 
-
-    return (
-        <div className="px-4 pt-16 pb-12 text-center">
-            {guide.image && <img src={image} alt={name} className="shadow-md mx-auto mb-10 rounded-full w-36 md:w-48 lg:w-72 h-36 md:h-48 lg:h-72" />}
-            <h2 className="p-2 font-bold text-2xl text-teal-800 md:text-3xl">{name}</h2>
-            <p className="mb-2 text-gray-700 text-sm md:text-base"><span className='font-bold'>Email:</span>   {email}</p>
-            <p className="mb-2 text-gray-700 text-sm md:text-base"><span className='font-bold'>Contact Number:</span> {number}</p>
-            <p className="mb-4 text-gray-700 text-sm md:text-base"><span className='font-bold'>Education:</span> {education}</p>
-            <div>
-            <p className="mb-2 font-bold text-base text-gray-700">Skills:</p>
-            <p className="mb-4 text-gray-700 text-sm md:text-base" >{skill}</p>
-            </div>
-            <div className="mx-auto max-w-2xl text-left">
-            <p className="mb-2 font-bold text-base text-gray-700">Work Experience:</p>
-            <p className="mb-4 text-gray-700 text-sm md:text-base" >{work}</p>
-            </div>
+      <div className='space-y-4 mt-6 text-left'>
+        <div>
+          <h3 className='font-semibold text-sky-700 text-lg'>Skills</h3>
+          <p className='text-gray-700'>{skill}</p>
         </div>
-    );
-};
+        <div>
+          <h3 className='font-semibold text-sky-700 text-lg'>Work Experience</h3>
+          <p className='text-gray-700'>{work}</p>
+        </div>
+      </div>
+    </div>
+  )
+}
 
-export default GuideDetails;
+export default GuideDetails

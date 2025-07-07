@@ -12,43 +12,37 @@ const MeetGuides = () => {
       return res.data
     }
   })
-  // console.log(guides)
 
   return (
-    <div className='px-12 py-6'>
-      <div className='overflow-x-auto'>
-        <table className='mt-10 w-full table table-zebra'>
-          {/* head */}
-          <thead>
+    <div className='mx-auto px-6 md:px-12 py-10 max-w-7xl'>
+      <h2 className='mb-4 font-extrabold text-sky-600 text-3xl text-center'>Meet Our Expert Tour Guides</h2>
+      <div className='bg-white shadow-md rounded-lg overflow-x-auto'>
+        <table className='w-full text-left table-auto'>
+          <thead className='bg-sky-100 text-sky-700'>
             <tr>
-              <th></th>
-              <th></th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Contact Number</th>
-              <th>Education</th>
+              <th className='p-3'>#</th>
+              <th className='p-3'>Photo</th>
+              <th className='p-3'>Name</th>
+              <th className='p-3'>Email</th>
+              <th className='p-3'>Phone</th>
+              <th className='p-3'>Education</th>
+              <th className='p-3'>Action</th>
             </tr>
           </thead>
           <tbody>
-            {guides.map((user, index) => (
-              <tr key={user._id}>
-                <th>{index + 1}</th>
-                <td>
-                  <img
-                    className='rounded-full w-12 h-12'
-                    src={user.image}
-                    alt=''
-                  />
+            {guides.map((guide, i) => (
+              <tr key={guide._id} className='border-b'>
+                <td className='p-3'>{i + 1}</td>
+                <td className='p-3'>
+                  <img src={guide.image} alt='' className='rounded-full w-10 h-10' />
                 </td>
-                <td>{user.name}</td>
-                <td>{user.email}</td>
-                <td>{user.number}</td>
-                <td>{user.education}</td>
-                <td>
-                  <Link to={`/guideDetails/${user._id}`}>
-                    <button className='bg-blue-600 text-white btn btn-sm'>
-                      Details
-                    </button>
+                <td className='p-3'>{guide.name}</td>
+                <td className='p-3'>{guide.email}</td>
+                <td className='p-3'>{guide.number}</td>
+                <td className='p-3'>{guide.education}</td>
+                <td className='p-3'>
+                  <Link to={`/guideDetails/${guide._id}`}>
+                    <button className='bg-sky-600 hover:bg-sky-700 text-white btn btn-sm'>Details</button>
                   </Link>
                 </td>
               </tr>

@@ -17,28 +17,27 @@ const AllPackages = () => {
       return res.data
     }
   })
- // // console.log(spots)
 
   if (isPending) {
-    return <span className='text-primary loading loading-spinner'></span>
+    return (
+      <div className='flex justify-center pt-24'>
+        <span className='text-sky-600 loading loading-spinner'></span>
+      </div>
+    )
   }
 
   if (isError) {
-    return <p>{error.message}</p>
+    return <p className='text-red-600 text-center'>{error.message}</p>
   }
 
   return (
-    <div className='flex flex-col justify-center items-center mx-auto px-2 pb-12'>
-      <h1 className='pt-24 pb-12 font-black text-4xl text-center text-sky-600'>
-        All Packages
+    <div className='px-4 pt-24 pb-20 text-center'>
+      <h1 className='bg-clip-text bg-gradient-to-r from-sky-500 to-sky-600 mb-10 font-extrabold text-transparent text-4xl uppercase tracking-widest'>
+        All Tour Packages
       </h1>
-      <div className='gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
+      <div className='justify-items-center gap-y-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
         {spots?.map(spot => (
-          <PackageCard
-            key={spot._id}
-            spot={spot}
-            refetch={refetch}
-          ></PackageCard>
+          <PackageCard key={spot._id} spot={spot} refetch={refetch} />
         ))}
       </div>
     </div>

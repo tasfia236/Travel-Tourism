@@ -19,6 +19,8 @@ import StoryDetail from '../pages/Home/TouristStories/StoriesDetails/StoryDetail
 import GuideDetails from '../pages/Home/TourismGuide/MeetGuides/GuideDetails'
 import TypePackages from '../pages/Home/TourType/TypePackages'
 import ErrorPage from '../pages/ErrorPage/ErrorPage'
+import BlogPage from '../pages/BlogPage/BlogPage'
+import ContactUs from '../pages/ContactUs/ContactUs'
 
 const Routes = createBrowserRouter([
   {
@@ -46,29 +48,44 @@ const Routes = createBrowserRouter([
         path: 'details/:id',
         element: <Detalis></Detalis>,
         loader: ({ params }) =>
-          fetch(`https://travel-tourism-seven.vercel.app/spots/${params.id}`)
+          fetch(`http://localhost:4000/spots/${params.id}`)
       },
       {
         path: '/all-stories',
         element: <AllStories></AllStories>
       },
       {
+        path: '/blog-page',
+        element: <BlogPage></BlogPage>
+      },
+      
+      {
+        path: '/contact',
+        element: <ContactUs></ContactUs>
+      },
+      {
         path: '/story/:id',
         element: <StoryDetail></StoryDetail>,
         loader: ({ params }) =>
-          fetch(`https://travel-tourism-seven.vercel.app/story/${params.id}`)
+          fetch(`http://localhost:4000/story/${params.id}`)
       },
       {
         path: '/guideDetails/:id',
         element: <GuideDetails></GuideDetails>,
         loader: ({ params }) =>
-          fetch(`https://travel-tourism-seven.vercel.app/guidedetails/${params.id}`)
+          fetch(`http://localhost:4000/guidedetails/${params.id}`)
       },
       {
-        path: 'tourtype/:id',
+        path: 'tourtype/:type',
         element: <TypePackages></TypePackages>,
-        loader: ({ params }) =>
-          fetch(`https://travel-tourism-seven.vercel.app/tourtype/${params.id}`)
+        loader: async ({ params }) => {
+          const res = await fetch(
+            `http://localhost:4000/tourtype/${params.type}`
+          )
+          if (!res.ok) return []
+          const data = await res.json()
+          return data
+        }
       }
     ]
   },
