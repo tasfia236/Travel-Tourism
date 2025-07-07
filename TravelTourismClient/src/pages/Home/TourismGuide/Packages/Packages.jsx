@@ -7,7 +7,7 @@ const Packages = () => {
   const { isPending, isError, error, data: spots } = useQuery({
     queryKey: ['spots'],
     queryFn: async () => {
-      const res = await fetch('https://travel-tourism-seven.vercel.app/spots')
+      const res = await fetch('https://travel-tourism-server-six.vercel.app/spots')
       return res.json()
     }
   })
