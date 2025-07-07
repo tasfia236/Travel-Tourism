@@ -48,7 +48,7 @@ const Routes = createBrowserRouter([
         path: 'details/:id',
         element: <Detalis></Detalis>,
         loader: ({ params }) =>
-          fetch(`http://localhost:4000/spots/${params.id}`)
+          fetch(`https://travel-tourism-seven.vercel.app/spots/${params.id}`)
       },
       {
         path: '/all-stories',
@@ -58,7 +58,7 @@ const Routes = createBrowserRouter([
         path: '/blog-page',
         element: <BlogPage></BlogPage>
       },
-      
+
       {
         path: '/contact',
         element: <ContactUs></ContactUs>
@@ -67,20 +67,20 @@ const Routes = createBrowserRouter([
         path: '/story/:id',
         element: <StoryDetail></StoryDetail>,
         loader: ({ params }) =>
-          fetch(`http://localhost:4000/story/${params.id}`)
+          fetch(`https://travel-tourism-seven.vercel.app/story/${params.id}`)
       },
       {
         path: '/guideDetails/:id',
         element: <GuideDetails></GuideDetails>,
         loader: ({ params }) =>
-          fetch(`http://localhost:4000/guidedetails/${params.id}`)
+          fetch(`https://travel-tourism-seven.vercel.app/guidedetails/${params.id}`)
       },
       {
         path: 'tourtype/:type',
         element: <TypePackages></TypePackages>,
         loader: async ({ params }) => {
           const res = await fetch(
-            `http://localhost:4000/tourtype/${params.type}`
+            `https://travel-tourism-seven.vercel.app/tourtype/${params.type}`
           )
           if (!res.ok) return []
           const data = await res.json()
